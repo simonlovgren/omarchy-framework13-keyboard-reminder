@@ -37,3 +37,7 @@ omarchy plugin enable maustronaut.framework13-keyboard-reminder
 
 Plugin uses Omarchy's `bar-widget` and `KeyboardPanel` interfaces. No commands
 run and no system settings change.
+
+## License
+
+[MIT](LICENSE)
