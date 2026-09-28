@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "maustronaut.framework13-fn-keys",
+  "name": "Framework 13 Fn Keys",
+  "version": "1.0.0",
+  "author": "maustronaut",
+  "description": "Clickable Framework Laptop 13 function-key reference",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "Framework 13 Fn Keys",
+    "description": "Show Framework Laptop 13 function-key shortcuts",
+    "category": "System",
+    "allowMultiple": false,
+    "defaultSection": "right"
+  }
+}
