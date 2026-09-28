@@ -1,4 +1,4 @@
-# Framework 13 Fn Keys
+# Framework 13 Keyboard Reminder
 
 Omarchy bar plugin. Click `Fn` in bar: popup shows ANSI keyboard layout and
 Framework Laptop 13 top-row shortcuts.
@@ -24,15 +24,15 @@ Hold `Fn` with top-row key:
 
 ```bash
 omarchy plugin add /absolute/path/to/framework13-fn-keys --enable --yes
-omarchy bar move maustronaut.framework13-fn-keys --section right
+omarchy bar move maustronaut.framework13-keyboard-reminder --section right
 ```
 
 Or copy checkout to
-`~/.config/omarchy/plugins/maustronaut.framework13-fn-keys/`, then:
+`~/.config/omarchy/plugins/maustronaut.framework13-keyboard-reminder/`, then:
 
 ```bash
 omarchy-shell shell rescanPlugins
-omarchy plugin enable maustronaut.framework13-fn-keys
+omarchy plugin enable maustronaut.framework13-keyboard-reminder
 ```
 
 Plugin uses Omarchy's `bar-widget` and `KeyboardPanel` interfaces. No commands

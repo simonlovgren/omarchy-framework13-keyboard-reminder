@@ -4,8 +4,8 @@ import qs.Commons
 
 Panel {
   id: root
-  moduleName: "maustronaut.framework13-fn-keys"
-  ipcTarget: "maustronaut.framework13-fn-keys"
+  moduleName: "maustronaut.framework13-keyboard-reminder"
+  ipcTarget: "maustronaut.framework13-keyboard-reminder"
   manageIpc: false
 
   property var anchorItem: null

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "id": "maustronaut.framework13-fn-keys",
-  "name": "Framework 13 Fn Keys",
+  "id": "maustronaut.framework13-keyboard-reminder",
+  "name": "Framework 13 Keyboard Reminder",
   "version": "1.0.0",
   "author": "maustronaut",
   "description": "Clickable Framework Laptop 13 function-key reference",
@@ -12,7 +12,7 @@
     "barWidget": "BarWidget.qml"
   },
   "barWidget": {
-    "displayName": "Framework 13 Fn Keys",
+    "displayName": "Framework 13 Keyboard Reminder",
     "description": "Show Framework Laptop 13 function-key shortcuts",
     "category": "System",
     "allowMultiple": false,

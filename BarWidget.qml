@@ -4,7 +4,7 @@ import qs.Commons
 
 BarWidget {
   id: root
-  moduleName: "maustronaut.framework13-fn-keys"
+  moduleName: "maustronaut.framework13-keyboard-reminder"
 
   readonly property bool opened: panelLoader.item ? panelLoader.item.opened === true : false
   readonly property bool popoutSwitchClosing: panelLoader.item

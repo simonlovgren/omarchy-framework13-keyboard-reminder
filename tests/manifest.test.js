@@ -8,7 +8,7 @@ const widget = fs.readFileSync(path.join(root, manifest.entryPoints.barWidget), 
 const panel = fs.readFileSync(path.join(root, "Panel.qml"), "utf8");
 
 assert.equal(manifest.schemaVersion, 1);
-assert.equal(manifest.id, "maustronaut.framework13-fn-keys");
+assert.equal(manifest.id, "maustronaut.framework13-keyboard-reminder");
 assert.deepEqual(manifest.kinds, ["bar-widget"]);
 assert.equal(manifest.barWidget.defaultSection, "right");
 assert.equal(manifest.barWidget.defaults.showIcons, true);
