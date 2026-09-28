@@ -17,6 +17,7 @@ Panel {
   readonly property color keyFill: Color.popups.background
   readonly property color actionFill: Style.selectedFillFor(foreground, Color.accent)
   readonly property color keyBorder: Style.normalBorderFor(foreground, Color.accent)
+  readonly property bool showIcons: setting("showIcons", true)
 
   function open() {
     controller.show()
@@ -34,6 +35,17 @@ Panel {
     popoutSwitchClosing = true
     close()
     Qt.callLater(function() { popoutSwitchClosing = false })
+  }
+
+  function toggleLegendStyle() {
+    var entry = { id: root.moduleName }
+    for (var key in root.settings)
+      if (key !== "id") entry[key] = root.settings[key]
+    entry.showIcons = !root.showIcons
+    root.settings = entry
+    if (root.hostWidget) root.hostWidget.settings = entry
+    if (root.bar && root.bar.shell && typeof root.bar.shell.updateEntryInline === "function")
+      root.bar.shell.updateEntryInline(root.moduleName, entry)
   }
 
   KeyboardPanel {
@@ -59,19 +71,20 @@ Panel {
       width: 15 * unit + 14 * gap
       readonly property var rows: [
         [
-          { key: "Esc", action: "Fn", width: 2 },
-          { key: "F1", action: "BR-" },
-          { key: "F2", action: "BR+" },
-          { key: "F3", action: "KB-" },
-          { key: "F4", action: "KB+" },
-          { key: "F5", action: "RF" },
-          { key: "F6", action: "MIC" },
-          { key: "F7", action: "PREV" },
-          { key: "F8", action: "PLAY" },
-          { key: "F9", action: "NEXT" },
-          { key: "F10", action: "MUTE" },
-          { key: "F11", action: "VOL-" },
-          { key: "F12", action: "VOL+", width: 2 }
+          { key: "Esc", action: "FN LK", icon: "󰌾", description: "Fn Lock", width: 1.5 },
+          { key: "F1", action: "MUTE", icon: "󰖁", description: "Speaker mute" },
+          { key: "F2", action: "VOL-", icon: "󰖀", description: "Volume down" },
+          { key: "F3", action: "VOL+", icon: "󰕾", description: "Volume up" },
+          { key: "F4", action: "PREV", icon: "󰒮", description: "Previous track" },
+          { key: "F5", action: "PLAY", icon: "󰐊", description: "Play/pause" },
+          { key: "F6", action: "NEXT", icon: "󰒭", description: "Next track" },
+          { key: "F7", action: "BR-", icon: "󰃞", description: "Display brightness down" },
+          { key: "F8", action: "BR+", icon: "󰃠", description: "Display brightness up" },
+          { key: "F9", action: "DISP", icon: "󰍹", description: "Display mode" },
+          { key: "F10", action: "AIR", icon: "󰀝", description: "Airplane mode" },
+          { key: "F11", action: "PRT", icon: "󰄀", description: "Print screen" },
+          { key: "F12", action: "FW", icon: "󰒓", description: "Framework boot selector" },
+          { key: "Del", action: "INS", icon: "INS", description: "Insert", width: 1.5 }
         ],
         [
           { key: "`" }, { key: "1" }, { key: "2" }, { key: "3" }, { key: "4" },
@@ -94,20 +107,51 @@ Panel {
           { key: "." }, { key: "/" }, { key: "Shift", width: 2.75 }
         ],
         [
-          { key: "Ctrl", width: 1.25 }, { key: "Super", width: 1.25 },
-          { key: "Alt", width: 1.25 }, { key: "Fn", action: "Fn", width: 1.25 },
+          { key: "Ctrl", width: 1.25 }, { key: "Fn", width: 1.25 },
+          { key: "Super", width: 1.25 }, { key: "Alt", width: 1.25 },
           { key: "Space", width: 4.5 }, { key: "Alt", width: 1.25 },
           { key: "Ctrl", width: 1.25 }, { key: "←" }, { key: "↑↓" }, { key: "→" }
         ]
       ]
 
-      Text {
-        id: title
-        text: "FRAMEWORK LAPTOP 13"
-        color: root.foreground
-        font.family: root.bar ? root.bar.fontFamily : Style.font.family
-        font.bold: true
-        font.pixelSize: Style.font.title
+      Item {
+        width: parent.width
+        implicitHeight: Math.max(title.implicitHeight, legendToggle.implicitHeight)
+
+        Text {
+          id: title
+          anchors.verticalCenter: parent.verticalCenter
+          text: "FRAMEWORK LAPTOP 13"
+          color: root.foreground
+          font.family: root.bar ? root.bar.fontFamily : Style.font.family
+          font.bold: true
+          font.pixelSize: Style.font.title
+        }
+
+        Item {
+          id: legendToggle
+          anchors.right: parent.right
+          anchors.verticalCenter: parent.verticalCenter
+          implicitWidth: toggleGlyph.implicitWidth
+          implicitHeight: toggleGlyph.implicitHeight
+
+          Text {
+            id: toggleGlyph
+            anchors.centerIn: parent
+            text: root.showIcons ? "ABC" : "󰌌"
+            color: root.foreground
+            font.family: root.bar ? root.bar.fontFamily : Style.font.family
+            font.bold: root.showIcons
+            font.pixelSize: Style.font.icon
+          }
+
+          MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+            onClicked: root.toggleLegendStyle()
+          }
+        }
       }
 
       Text {
@@ -139,6 +183,7 @@ Panel {
                   required property var modelData
                   readonly property var keyData: modelData
                   readonly property bool hasAction: keyData.action !== undefined
+                  readonly property bool hasSubLabel: hasAction || keyData.subLabel !== undefined
 
                   width: (keyData.width || 1) * keyboard.unit + ((keyData.width || 1) - 1) * keyboard.gap
                   height: keyboard.unit
@@ -162,8 +207,10 @@ Panel {
 
                     Text {
                       anchors.horizontalCenter: parent.horizontalCenter
-                      visible: hasAction
-                      text: keyData.action || ""
+                      visible: hasSubLabel
+                      text: root.showIcons && keyData.icon
+                        ? keyData.icon
+                        : (keyData.action || keyData.subLabel || "")
                       color: root.mutedForeground
                       font.family: root.bar ? root.bar.fontFamily : Style.font.family
                       font.bold: true
@@ -189,24 +236,13 @@ Panel {
         rowSpacing: Style.space(7)
 
         Repeater {
-          model: [
-            "BR-  display brightness down",
-            "BR+  display brightness up",
-            "KB-  keyboard backlight down",
-            "KB+  keyboard backlight up",
-            "RF   wireless toggle",
-            "MIC  microphone mute",
-            "PREV previous track",
-            "PLAY play/pause",
-            "NEXT next track",
-            "MUTE speaker mute",
-            "VOL- volume down",
-            "VOL+ volume up"
-          ]
+          model: keyboard.rows[0].filter(function(item) { return item.action !== undefined })
 
           delegate: Text {
-            required property string modelData
-            text: modelData
+            required property var modelData
+            text: root.showIcons
+              ? modelData.icon + "  " + modelData.description
+              : modelData.action + "  " + modelData.description
             color: root.mutedForeground
             font.family: root.bar ? root.bar.fontFamily : Style.font.family
             font.pixelSize: Style.font.bodySmall

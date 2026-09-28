@@ -16,6 +16,9 @@
     "description": "Show Framework Laptop 13 function-key shortcuts",
     "category": "System",
     "allowMultiple": false,
-    "defaultSection": "right"
+    "defaultSection": "right",
+    "defaults": {
+      "showIcons": true
+    }
   }
 }
